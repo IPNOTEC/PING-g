@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPNOTEC PINGG | INTERACTIVE COMMUNICATOR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* NEON Color Palette */
+            --neon-violet: #9d00ff;
+            --neon-indigo: #5d00ff;
+            --neon-blue: #00a2ff;
+            --neon-cyan: #00ffea;
+            --neon-green: #00ff9d;
+            --neon-yellow: #fff000;
+            --neon-orange: #ff5d00;
+            --neon-red: #ff0000;
+            --neon-pink: #ff00cc;
+            --neon-white: #ffffff;
+            
+            /* UI Colors */
+            --bg-color: #000000;
+            --device-glass: rgba(10, 10, 20, 0.95);
+            --glass-border: rgba(100, 100, 255, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-neon: #00ffea;
+            
+            /* Effects */
+            --neon-glow: 0 0 20px;
+            --glass-blur: blur(20px);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Key States */
+            --key-glass: rgba(40, 40, 60, 0.8);
+            --key-pressed: rgba(100, 100, 255, 0.5);
+            
+            /* Grey shades for dots */
+            --grey-1: #000000;
+            --grey-2: #333333;
+            --grey-3: #666666;
+            --grey-4: #999999;
+            --grey-5: #cccccc;
+            --grey-6: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Main Device Frame - SQUARE/RECTANGULAR */
+        .ping-device {
+            width: 440px;
+            height: 850px;
+            background: var(--device-glass);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 0; /* SQUARE CORNERS */
+            position: relative;
+            box-shadow: 
+                0 0 0 2px rgba(255, 255, 255, 0.1),
+                0 30px 60px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(0, 255, 234, 0.1);
+            border: 2px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            z-index: 1;
+        }
+
+        /* Left Vertical Color Bar - RECTANGULAR */
+        .vertical-color-bar {
+            position: absolute;
+            left: 0;
+            top: 60px;
+            bottom: 100px;
+            width: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 0;
+            z-index: 5;
+            border-radius: 0;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .color-segment {
+            flex: 1;
+            width: 100%;
+            opacity: 0.2;
+            transition: all 0.5s ease;
+            border-radius: 0; /* SQUARE */
+            position: relative;
+            border: none;
+        }
+
+        .color-segment.active {
+            opacity: 1;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* Top Status Bar - RECTANGULAR */
+        .status-bar {
+            height: 50px;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Three Dots Indicator - SQUARE with grey shades */
+        .three-dots-indicator {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 0; /* SQUARE */
+            position: relative;
+        }
+
+        .status-dot:nth-child(1) {
+            background: var(--grey-1);
+            animation: dotPulseGrey1 2s infinite;
+        }
+
+        .status-dot:nth-child(2) {
+            background: var(--grey-3);
+            animation: dotPulseGrey3 2s infinite 0.5s;
+        }
+
+        .status-dot:nth-child(3) {
+            background: var(--grey-6);
+            animation: dotPulseGrey6 2s infinite 1s;
+        }
+
+        @keyframes dotPulseGrey1 {
+            0%, 100% { 
+                opacity: 0.4;
+                box-shadow: 0 0 5px var(--grey-1);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 20px var(--grey-1);
+            }
+        }
+
+        @keyframes dotPulseGrey3 {
+            0%, 100% { 
+                opacity: 0.4;
+                box-shadow: 0 0 5px var(--grey-3);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 20px var(--grey-3);
+            }
+        }
+
+        @keyframes dotPulseGrey6 {
+            0%, 100% { 
+                opacity: 0.4;
+                box-shadow: 0 0 5px var(--grey-6);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 20px var(--grey-6);
+            }
+        }
+
+        /* Custom header with flipped G */
+        .branding {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-violet), var(--neon-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .flipped-g {
+            display: inline-block;
+            transform: rotateY(180deg);
+            background: linear-gradient(90deg, var(--neon-orange), var(--neon-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-right-orange {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-orange);
+            animation: orangePulse 2s infinite;
+        }
+
+        @keyframes orangePulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Top Color Strip - RECTANGULAR */
+        .top-color-strip {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: var(--neon-orange);
+            border-radius: 0;
+            box-shadow: 0 0 15px var(--neon-orange);
+            transition: all 0.8s ease;
+            z-index: 11;
+        }
+
+        /* Screen Area - RECTANGULAR */
+        .screen-area {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.6);
+            margin: 10px;
+            border-radius: 0; /* SQUARE */
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Chat Interface */
+        .chat-interface {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .chat-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: var(--text-neon);
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 15px;
+            border-radius: 0; /* SQUARE */
+            position: relative;
+            animation: messageSlide 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            font-size: 13px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: rgba(0, 162, 255, 0.15);
+            border-color: rgba(0, 255, 234, 0.3);
+            color: var(--neon-cyan);
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(30, 30, 60, 0.5);
+            border-color: rgba(157, 0, 255, 0.3);
+            color: var(--text-primary);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .message-sender {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .sender-color {
+            width: 8px;
+            height: 8px;
+            border-radius: 0; /* SQUARE */
+            display: inline-block;
+            box-shadow: 0 0 5px currentColor;
+        }
+
+        .message-time {
+            font-family: 'Share Tech Mono', monospace;
+            opacity: 0.7;
+            font-size: 9px;
+            color: var(--text-secondary);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 10px 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            gap: 10px;
+            z-index: 1;
+        }
+
+        .message-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 234, 0.2);
+            border-radius: 0; /* SQUARE */
+            padding: 10px 15px;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            font-family: 'Exo 2', sans-serif;
+            transition: var(--transition-smooth);
+        }
+
+        .message-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 234, 0.3);
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 0; /* SQUARE */
+            background: rgba(0, 255, 234, 0.2);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            font-size: 16px;
+        }
+
+        .send-button:hover {
+            background: var(--neon-cyan);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        /* Node Selection Screen */
+        .ping-startup-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.8s ease;
+        }
+
+        .ping-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-align: center;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            animation: pingGlow 3s infinite;
+        }
+
+        @keyframes pingGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 234, 0.5); }
+            50% { text-shadow: 0 0 40px rgba(157, 0, 255, 0.7); }
+        }
+
+        .ping-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            color: var(--text-neon);
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .node-selection-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .node-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            width: 280px;
+            margin-bottom: 30px;
+        }
+
+        .node-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 0; /* SQUARE */
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px currentColor;
+        }
+
+        .node-option.selected {
+            border-color: white;
+            box-shadow: 0 0 30px white;
+            animation: nodePulse 2s infinite;
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .node-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 8px;
+            position: absolute;
+            bottom: -18px;
+            color: var(--text-secondary);
+            width: 100%;
+            text-align: center;
+        }
+
+        /* RECTANGULAR Keypad */
+        .keypad-container {
+            height: 240px;
+            background: rgba(0, 0, 0, 0.5);
+            margin: 10px;
+            border-radius: 0; /* SQUARE */
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: grid;
+            grid-template-rows: repeat(4, 1fr);
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+            padding: 10px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Key Styles - RECTANGULAR */
+        .key {
+            background: var(--key-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0; /* SQUARE */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .key:active {
+            background: var(--key-pressed);
+            transform: scale(0.95);
+        }
+
+        .key.space {
+            grid-column: span 3;
+        }
+
+        .key.enter {
+            background: rgba(0, 162, 255, 0.2);
+            color: var(--neon-cyan);
+            font-weight: 700;
+            border-color: rgba(0, 255, 234, 0.3);
+        }
+
+        .key.backspace {
+            background: rgba(255, 0, 0, 0.2);
+            color: var(--neon-red);
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+
+        /* Key Lighting Logic */
+        .key.lit {
+            box-shadow: 0 0 15px currentColor;
+            border-color: currentColor;
+            color: currentColor;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Frame Glow Effect */
+        .frame-glow {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 0; /* SQUARE */
+            background: transparent;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        /* Footer Control Panel */
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-button {
+            padding: 8px 5px;
+            background: rgba(40, 40, 60, 0.8);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border-radius: 0; /* SQUARE */
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .control-button:hover {
+            background: var(--neon-cyan);
+            color: black;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .control-button.active {
+            background: var(--neon-cyan);
+            color: black;
+        }
+
+        /* Edge Indicator */
+        .edge-indicator {
+            position: absolute;
+            left: 0;
+            top: 60px;
+            width: 10px;
+            height: 50px;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* Scrollbar */
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-cyan), var(--neon-violet));
+            border-radius: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .ping-device {
+                width: 95vw;
+                height: 90vh;
+            }
+            
+            .keypad-container {
+                height: 200px;
+                gap: 3px;
+                padding: 8px;
+            }
+            
+            .key {
+                font-size: 12px;
+            }
+            
+            .node-grid {
+                width: 90%;
+                gap: 10px;
+            }
+            
+            .node-option {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .control-button {
+                font-size: 9px;
+                padding: 6px 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Device -->
+    <div class="ping-device" id="deviceFrame">
+        <!-- Left Vertical Color Bar -->
+        <div class="vertical-color-bar" id="verticalColorBar">
+            <!-- Color segments will be added dynamically -->
+        </div>
+
+        <!-- Edge Indicator -->
+        <div class="edge-indicator" id="edgeIndicator"></div>
+
+        <!-- Top Color Strip -->
+        <div class="top-color-strip" id="topColorStrip"></div>
+
+        <!-- Frame Glow -->
+        <div class="frame-glow" id="frameGlow"></div>
+
+        <!-- Status Bar with Header -->
+        <div class="status-bar">
+            <div class="three-dots-indicator">
+                <div class="status-dot"></div>
+                <div class="status-dot"></div>
+                <div class="status-dot"></div>
+            </div>
+            <div class="branding" id="deviceBranding">
+                IPNOTEC PING<span class="flipped-g">G</span>
+            </div>
+            <div class="top-right-orange"></div>
+        </div>
+
+        <!-- Screen Area -->
+        <div class="screen-area">
+            <!-- Node Selection Screen -->
+            <div class="ping-startup-screen" id="pingStartupScreen">
+                <div class="ping-logo">IPNOTEC PINGG</div>
+                <div class="ping-subtitle">NEON COMMUNICATION NETWORK</div>
+                <div class="node-selection-title">SELECT YOUR NODE COLOR</div>
+                <div class="node-grid" id="nodeGrid">
+                    <!-- Node options will be added dynamically -->
+                </div>
+                <button class="send-button" id="confirmNodeButton" onclick="confirmNodeSelection()" style="width: 200px; height: 40px; font-size: 12px;">
+                    <i class="fas fa-plug"></i> CONNECT TO NETWORK
+                </button>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="chat-interface" id="chatInterface">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-title">IPNOTEC NEON NETWORK</div>
+                    <div class="chat-subtitle">NODE: <span id="currentUserNode">CYAN</span> • SYSTEM: <span id="systemStatus">ONLINE</span></div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input-container">
+                    <input type="text" class="message-input" id="messageInput" placeholder="Type your message..." />
+                    <button class="send-button" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECTANGULAR Keypad -->
+        <div class="keypad-container" id="keypad">
+            <!-- First Row -->
+            <div class="key key-1">1</div>
+            <div class="key key-2">2</div>
+            <div class="key key-3">3</div>
+            <div class="key key-4">4</div>
+            <div class="key key-5">5</div>
+            <div class="key key-6">6</div>
+            <div class="key key-7">7</div>
+            <div class="key key-8">8</div>
+            <div class="key key-9">9</div>
+            <div class="key key-0">0</div>
+
+            <!-- Second Row -->
+            <div class="key key-q">Q</div>
+            <div class="key key-w">W</div>
+            <div class="key key-e">E</div>
+            <div class="key key-r">R</div>
+            <div class="key key-t">T</div>
+            <div class="key key-y">Y</div>
+            <div class="key key-u">U</div>
+            <div class="key key-i">I</div>
+            <div class="key key-o">O</div>
+            <div class="key key-p">P</div>
+
+            <!-- Third Row -->
+            <div class="key key-a">A</div>
+            <div class="key key-s">S</div>
+            <div class="key key-d">D</div>
+            <div class="key key-f">F</div>
+            <div class="key key-g">G</div>
+            <div class="key key-h">H</div>
+            <div class="key key-j">J</div>
+            <div class="key key-k">K</div>
+            <div class="key key-l">L</div>
+
+            <!-- Fourth Row -->
+            <div class="key key-shift special">SHIFT</div>
+            <div class="key key-z">Z</div>
+            <div class="key key-x">X</div>
+            <div class="key key-c">C</div>
+            <div class="key key-v">V</div>
+            <div class="key key-b">B</div>
+            <div class="key key-n">N</div>
+            <div class="key key-m">M</div>
+            <div class="key key-backspace special"><i class="fas fa-backspace"></i></div>
+
+            <!-- Fifth Row -->
+            <div class="key key-symbols special">?123</div>
+            <div class="key key-mic special"><i class="fas fa-microphone"></i></div>
+            <div class="key key-space space">SPACE</div>
+            <div class="key key-comma special">,</div>
+            <div class="key key-period special">.</div>
+            <div class="key key-enter enter">ENTER</div>
+        </div>
+
+        <!-- Footer Control Panel -->
+        <div class="control-panel">
+            <button class="control-button" onclick="sendPing()">
+                SEND PING
+            </button>
+            <button class="control-button" onclick="clearChat()">
+                CLEAR LOG
+            </button>
+            <button class="control-button" onclick="randomizeColors()">
+                RANDOMIZE
+            </button>
+            <button class="control-button" id="toggleKeypadLighting" onclick="toggleKeypadLighting()">
+                KEYLIGHTS OFF
+            </button>
+            <button class="control-button" id="toggleAnimation" onclick="toggleAnimation()">
+                ANIMATION ON
+            </button>
+            <button class="control-button" id="toggleSound" onclick="toggleSound()">
+                SOUND OFF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let userNodeColor = 'cyan';
+        let userNodeName = 'CYAN EXPLORER';
+        let isSystemOnline = true;
+        let keypadLighting = false;
+        let animationsEnabled = true;
+        let soundEnabled = false;
+        let activeFrameGlow = null;
+        let verticalBarAnimation = null;
+        let currentColorIndex = 0;
+        let lastSenderKey = null;
+        let lastSenderColor = null;
+        
+        // Color Configuration
+        const colorConfig = [
+            { id: 'violet', hex: '#9d00ff', name: 'VIOLET' },
+            { id: 'indigo', hex: '#5d00ff', name: 'INDIGO' },
+            { id: 'blue', hex: '#00a2ff', name: 'BLUE' },
+            { id: 'cyan', hex: '#00ffea', name: 'CYAN' },
+            { id: 'green', hex: '#00ff9d', name: 'GREEN' },
+            { id: 'yellow', hex: '#fff000', name: 'YELLOW' },
+            { id: 'orange', hex: '#ff5d00', name: 'ORANGE' },
+            { id: 'red', hex: '#ff0000', name: 'RED' },
+            { id: 'pink', hex: '#ff00cc', name: 'PINK' },
+            { id: 'white', hex: '#ffffff', name: 'WHITE' }
+        ];
+        
+        // IPNOTEC Network Participants
+        const networkParticipants = [
+            { name: 'ipnotec', color: 'orange', role: 'AI Research Lead' },
+            { name: '1001', color: 'violet', role: 'Blockchain Architect' },
+            { name: 'bharath', color: 'green', role: 'Wearable Tech Expert' },
+            { name: 'quantum', color: 'cyan', role: 'Smart Home Systems' },
+            { name: 'nova', color: 'blue', role: 'Sustainable Tech' },
+            { name: 'echo', color: 'yellow', role: 'Energy Innovation' },
+            { name: 'synth', color: 'pink', role: 'Music & Entertainment' },
+            { name: 'core', color: 'red', role: 'Security Systems' }
+        ];
+        
+        // IPNOTEC Chat Topics
+        const ipnotecTopics = [
+            "IPNOTEC WATCH revolutionizing smart wearables - phoneless, keyless, paperless ecosystem",
+            "The future of work: IPNOTEC coworking spaces with holographic meeting rooms",
+            "Blockchain transforming real estate - fractional ownership through IPNOTEC tokens",
+            "IPNOTEC STUDIOS producing techno music that syncs with neural patterns",
+            "LAND ROVER x IPNOTEC creating self-driving adventure vehicles with AR navigation",
+            "HARLEY DAVIDSON electric bikes with IPNOTEC neural interface controls",
+            "Container houses reimagined: IPNOTEC modular smart homes with AI management",
+            "International citizens living in IPNOTEC digital nomad hubs worldwide",
+            "Spirituality meets tech: IPNOTEC meditation pods with biofeedback systems",
+            "Steve Jobs' vision realized: IPNOTEC creating the next century's iconic products"
+        ];
+        
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize vertical color bar
+            initializeVerticalColorBar();
+            
+            // Initialize node selection grid
+            initializeNodeGrid();
+            
+            // Setup event listeners
+            document.getElementById('sendButton').addEventListener('click', sendMessage);
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Setup keypad listeners
+            document.querySelectorAll('.key').forEach(key => {
+                key.addEventListener('click', handleKeypadClick);
+                key.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                key.addEventListener('mouseup', function() {
+                    this.style.transform = 'scale(1)';
+                });
+                key.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Start vertical bar animation
+            startVerticalBarAnimation();
+            
+            // Start periodic bot messages
+            setTimeout(startBotMessages, 5000);
+        });
+        
+        // Initialize Vertical Color Bar
+        function initializeVerticalColorBar() {
+            const verticalBar = document.getElementById('verticalColorBar');
+            
+            colorConfig.forEach(color => {
+                const segment = document.createElement('div');
+                segment.className = 'color-segment';
+                segment.id = `segment-${color.id}`;
+                segment.style.backgroundColor = color.hex;
+                verticalBar.appendChild(segment);
+            });
+        }
+        
+        // Initialize Node Grid
+        function initializeNodeGrid() {
+            const nodeGrid = document.getElementById('nodeGrid');
+            
+            colorConfig.forEach(color => {
+                const nodeOption = document.createElement('div');
+                nodeOption.className = 'node-option';
+                if (color.id === userNodeColor) {
+                    nodeOption.classList.add('selected');
+                }
+                nodeOption.style.backgroundColor = color.hex;
+                nodeOption.dataset.color = color.id;
+                nodeOption.innerHTML = `
+                    ${color.id.charAt(0).toUpperCase()}
+                    <div class="node-label">${color.name}</div>
+                `;
+                
+                nodeOption.addEventListener('click', function() {
+                    selectNode(this.dataset.color);
+                });
+                
+                nodeGrid.appendChild(nodeOption);
+            });
+        }
+        
+        // Select Node
+        function selectNode(color) {
+            userNodeColor = color;
+            userNodeName = colorConfig.find(c => c.id === color).name + ' EXPLORER';
+            
+            // Update UI
+            document.querySelectorAll('.node-option').forEach(node => {
+                node.classList.remove('selected');
+            });
+            document.querySelector(`.node-option[data-color="${color}"]`).classList.add('selected');
+        }
+        
+        // Confirm Node Selection
+        function confirmNodeSelection() {
+            const pingScreen = document.getElementById('pingStartupScreen');
+            const chatInterface = document.getElementById('chatInterface');
+            
+            // Update user node display
+            document.getElementById('currentUserNode').textContent = 
+                colorConfig.find(c => c.id === userNodeColor).name;
+            
+            // Transition to chat interface
+            pingScreen.style.opacity = '0';
+            setTimeout(() => {
+                pingScreen.style.display = 'none';
+                chatInterface.style.opacity = '1';
+                
+                // Add welcome messages
+                setTimeout(() => {
+                    addBotMessage('SYSTEM', `WELCOME TO IPNOTEC NETWORK, ${userNodeName}`, 'cyan');
+                    setTimeout(() => {
+                        addBotMessage('QUANTUM-X', 'THE FUTURE BELONGS TO THOSE WHO CODE REALITY', 'violet');
+                    }, 1000);
+                }, 500);
+            }, 800);
+        }
+        
+        // Start Vertical Bar Animation
+        function startVerticalBarAnimation() {
+            clearInterval(verticalBarAnimation);
+            
+            if (!animationsEnabled) return;
+            
+            verticalBarAnimation = setInterval(() => {
+                // Deactivate all segments
+                document.querySelectorAll('.color-segment').forEach(segment => {
+                    segment.classList.remove('active');
+                });
+                
+                // Activate current segment
+                const segment = document.getElementById(`segment-${colorConfig[currentColorIndex].id}`);
+                if (segment) {
+                    segment.classList.add('active');
+                }
+                
+                // Update top color strip with orange as base
+                updateTopColorStrip(colorConfig[7].hex); // Orange
+                
+                // Move to next color
+                currentColorIndex = (currentColorIndex + 1) % colorConfig.length;
+            }, 500);
+        }
+        
+        // Update Top Color Strip
+        function updateTopColorStrip(colorHex) {
+            const topStrip = document.getElementById('topColorStrip');
+            topStrip.style.backgroundColor = colorHex;
+            topStrip.style.boxShadow = `0 0 20px ${colorHex}`;
+        }
+        
+        // Toggle Keypad Lighting
+        function toggleKeypadLighting() {
+            keypadLighting = !keypadLighting;
+            const button = document.getElementById('toggleKeypadLighting');
+            
+            if (keypadLighting) {
+                button.classList.add('active');
+                button.textContent = 'KEYLIGHTS ON';
+                // If there's a last sender, light that key
+                if (lastSenderKey && lastSenderColor) {
+                    lightSpecificKey(lastSenderKey, lastSenderColor);
+                }
+            } else {
+                button.classList.remove('active');
+                button.textContent = 'KEYLIGHTS OFF';
+                document.querySelectorAll('.key').forEach(key => {
+                    key.classList.remove('lit');
+                    key.style.color = '';
+                    key.style.borderColor = '';
+                    key.style.boxShadow = '';
+                });
+            }
+        }
+        
+        // Light Specific Key Based on Sender
+        function lightSpecificKey(keyLetter, colorName) {
+            if (!keypadLighting) return;
+            
+            // Turn off all keys first
+            document.querySelectorAll('.key').forEach(key => {
+                key.classList.remove('lit');
+                key.style.color = '';
+                key.style.borderColor = '';
+                key.style.boxShadow = '';
+            });
+            
+            // Find the color hex
+            const color = colorConfig.find(c => c.id === colorName);
+            if (!color) return;
+            
+            // Find and light the specific key
+            const keyElement = document.querySelector(`.key-${keyLetter.toLowerCase()}`);
+            if (keyElement) {
+                keyElement.classList.add('lit');
+                keyElement.style.color = color.hex;
+                keyElement.style.borderColor = color.hex;
+                keyElement.style.boxShadow = `0 0 15px ${color.hex}`;
+            }
+            
+            // Update edge indicator
+            const edgeIndicator = document.getElementById('edgeIndicator');
+            edgeIndicator.style.backgroundColor = color.hex;
+            edgeIndicator.style.opacity = '1';
+            
+            // Turn off edge indicator after 3 seconds
+            setTimeout(() => {
+                edgeIndicator.style.opacity = '0';
+            }, 3000);
+        }
+        
+        // Toggle Animation
+        function toggleAnimation() {
+            animationsEnabled = !animationsEnabled;
+            const button = document.getElementById('toggleAnimation');
+            
+            if (animationsEnabled) {
+                button.classList.add('active');
+                button.textContent = 'ANIMATION ON';
+                startVerticalBarAnimation();
+            } else {
+                button.classList.remove('active');
+                button.textContent = 'ANIMATION OFF';
+                clearInterval(verticalBarAnimation);
+                document.querySelectorAll('.color-segment').forEach(segment => {
+                    segment.classList.remove('active');
+                });
+            }
+        }
+        
+        // Toggle Sound
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const button = document.getElementById('toggleSound');
+            
+            if (soundEnabled) {
+                button.classList.add('active');
+                button.textContent = 'SOUND ON';
+            } else {
+                button.classList.remove('active');
+                button.textContent = 'SOUND OFF';
+            }
+        }
+        
+        // Handle Keypad Clicks
+        function handleKeypadClick(e) {
+            const key = e.currentTarget;
+            const keyText = key.textContent.trim();
+            const input = document.getElementById('messageInput');
+            
+            if (key.classList.contains('key-backspace')) {
+                input.value = input.value.slice(0, -1);
+            } else if (key.classList.contains('key-space')) {
+                input.value += ' ';
+            } else if (key.classList.contains('key-enter')) {
+                sendMessage();
+            } else if (key.classList.contains('special')) {
+                // Handle special keys
+                if (keyText === 'SHIFT') {
+                    // Shift - not implemented
+                } else if (keyText === '?123') {
+                    // Symbols - not implemented
+                } else if (keyText === ',') {
+                    input.value += ',';
+                } else if (keyText === '.') {
+                    input.value += '.';
+                }
+            } else {
+                input.value += keyText;
+            }
+            
+            input.focus();
+        }
+        
+        // Send Message
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                
+                // Bot response after delay
+                setTimeout(() => {
+                    const randomBot = networkParticipants[Math.floor(Math.random() * networkParticipants.length)];
+                    const response = generateBotResponse(message);
+                    addBotMessage(randomBot.name.toUpperCase(), response, randomBot.color);
+                }, 1000);
+            }
+        }
+        
+        // Add User Message
+        function addUserMessage(text) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            const userColor = colorConfig.find(c => c.id === userNodeColor);
+            
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-sender">
+                        <span class="sender-color" style="background-color: ${userColor.hex};"></span>
+                        YOU (${userNodeName})
+                    </div>
+                    <div class="message-time">${getCurrentTime()}</div>
+                </div>
+                <div>${text}</div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Trigger visual effects
+            triggerColorEffects(userNodeColor);
+        }
+        
+        // Add Bot Message
+        function addBotMessage(sender, text, color) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            const colorObj = colorConfig.find(c => c.id === color) || colorConfig[0];
+            
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <div class="message-sender">
+                        <span class="sender-color" style="background-color: ${colorObj.hex};"></span>
+                        ${sender}
+                    </div>
+                    <div class="message-time">${getCurrentTime()}</div>
+                </div>
+                <div>${text}</div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Store last sender info for key lighting
+            lastSenderKey = sender.charAt(0).toLowerCase();
+            lastSenderColor = color;
+            
+            // Trigger key lighting if enabled
+            if (keypadLighting) {
+                lightSpecificKey(lastSenderKey, lastSenderColor);
+            }
+            
+            // Trigger visual effects
+            triggerColorEffects(color);
+        }
+        
+        // Trigger Color Effects
+        function triggerColorEffects(color) {
+            // Update vertical color bar
+            activateColorSegment(color);
+            
+            // Trigger frame glow
+            triggerFrameGlow(color);
+        }
+        
+        // Activate Color Segment in Vertical Bar
+        function activateColorSegment(color) {
+            // Deactivate all segments first
+            document.querySelectorAll('.color-segment').forEach(segment => {
+                segment.classList.remove('active');
+            });
+            
+            // Activate the target segment
+            const segment = document.getElementById(`segment-${color}`);
+            if (segment) {
+                segment.classList.add('active');
+                
+                // Deactivate after 3 seconds
+                setTimeout(() => {
+                    segment.classList.remove('active');
+                }, 3000);
+            }
+        }
+        
+        // Trigger Frame Glow
+        function triggerFrameGlow(color) {
+            const frameGlow = document.getElementById('frameGlow');
+            const colorObj = colorConfig.find(c => c.id === color) || colorConfig[0];
+            const colorHex = colorObj.hex;
+            
+            // Clear any existing glow animation
+            if (activeFrameGlow) {
+                clearTimeout(activeFrameGlow);
+                frameGlow.style.opacity = '0';
+            }
+            
+            // Apply new glow
+            frameGlow.style.background = `radial-gradient(circle at center, ${colorHex}20, transparent 70%)`;
+            frameGlow.style.boxShadow = `0 0 40px ${colorHex}80, inset 0 0 40px ${colorHex}40`;
+            frameGlow.style.opacity = '1';
+            
+            // Remove glow after 1 second
+            activeFrameGlow = setTimeout(() => {
+                frameGlow.style.opacity = '0';
+                activeFrameGlow = null;
+            }, 1000);
+        }
+        
+        // Start Bot Messages
+        function startBotMessages() {
+            setInterval(() => {
+                const randomBot = networkParticipants[Math.floor(Math.random() * networkParticipants.length)];
+                const randomTopic = ipnotecTopics[Math.floor(Math.random() * ipnotecTopics.length)];
+                addBotMessage(randomBot.name.toUpperCase(), randomTopic, randomBot.color);
+            }, 15000);
+        }
+        
+        // Generate Bot Response
+        function generateBotResponse(userMessage) {
+            const upperMessage = userMessage.toUpperCase();
+            
+            // Check for IPNOTEC-related keywords
+            if (upperMessage.includes('IPNOTEC') || upperMessage.includes('ECOSYSTEM')) {
+                return "IPNOTEC is building the future: phoneless, keyless, paperless society with seamless integration across all devices.";
+            } else if (upperMessage.includes('WATCH') || upperMessage.includes('WEARABLE')) {
+                return "IPNOTEC WATCH uses neural interfaces to project holographic displays directly to your retina. No phone needed.";
+            } else if (upperMessage.includes('BLOCKCHAIN') || upperMessage.includes('TOKEN')) {
+                return "IPNOTEC blockchain will revolutionize property ownership through fractional NFT-based real estate tokens.";
+            } else if (upperMessage.includes('COWORK') || upperMessage.includes('WORKSPACE')) {
+                return "IPNOTEC coworking spaces feature holographic meeting rooms, neuro-feedback environments, and global network access.";
+            } else if (upperMessage.includes('MUSIC') || upperMessage.includes('TECHNO')) {
+                return "IPNOTEC STUDIOS creates adaptive music that changes based on your biometrics and environment. The future of entertainment.";
+            }
+            
+            // Default responses
+            const responses = [
+                "The IPNOTEC network processes your query through quantum algorithms. Result: affirmative.",
+                "Neural analysis confirms alignment with IPNOTEC future vision. Proceed with implementation.",
+                "Your input resonates at optimal frequency for innovation. The ecosystem adapts accordingly.",
+                "Quantum entanglement patterns detected in your message. The future is already responding.",
+                "IPNOTEC AI networks are processing millions of similar queries worldwide. You're not alone."
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // Get Current Time
+        function getCurrentTime() {
+            const now = new Date();
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+        
+        // Send Ping
+        function sendPing() {
+            addBotMessage('SYSTEM', 'PING SENT TO ALL NODES - RESPONSE RECEIVED', 'cyan');
+            triggerColorEffects('cyan');
+        }
+        
+        // Clear Chat
+        function clearChat() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = '';
+            addBotMessage('SYSTEM', 'CHAT LOG CLEARED', 'cyan');
+        }
+        
+        // Randomize Colors
+        function randomizeColors() {
+            const randomColor = colorConfig[Math.floor(Math.random() * colorConfig.length)];
+            userNodeColor = randomColor.id;
+            userNodeName = randomColor.name + ' EXPLORER';
+            
+            // Update display
+            document.getElementById('currentUserNode').textContent = randomColor.name;
+            
+            addBotMessage('SYSTEM', `NODE COLOR RANDOMIZED TO ${randomColor.name}`, randomColor.id);
+            triggerColorEffects(randomColor.id);
+        }
+    </script>
+</body>
+</html>
