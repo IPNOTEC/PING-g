@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPNOTEC PINGG | INTERACTIVE COMMUNICATOR</title>
+    <title>IPNOTEC PINGG | FUTURE COMMUNICATION INTERFACE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
@@ -20,22 +20,24 @@
             --neon-pink: #ff00cc;
             --neon-white: #ffffff;
             
-            /* UI Colors */
+            /* UI Colors - More Transparent */
             --bg-color: #000000;
-            --device-glass: rgba(10, 10, 20, 0.95);
-            --glass-border: rgba(100, 100, 255, 0.3);
+            --device-glass: rgba(0, 0, 0, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.15);
             --text-primary: #ffffff;
             --text-secondary: #cccccc;
             --text-neon: #00ffea;
+            --text-transparent: rgba(255, 255, 255, 0.8);
             
             /* Effects */
             --neon-glow: 0 0 20px;
-            --glass-blur: blur(20px);
+            --glass-blur: blur(25px);
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             
             /* Key States */
-            --key-glass: rgba(40, 40, 60, 0.8);
-            --key-pressed: rgba(100, 100, 255, 0.5);
+            --key-glass: rgba(40, 40, 60, 0.6);
+            --key-pressed: rgba(100, 100, 255, 0.4);
             
             /* Grey shades for dots */
             --grey-1: #000000;
@@ -63,9 +65,13 @@
             padding: 20px;
             overflow: hidden;
             position: relative;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(157, 0, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(0, 255, 234, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 40% 80%, rgba(255, 93, 0, 0.1) 0%, transparent 20%);
         }
 
-        /* Main Device Frame - SQUARE/RECTANGULAR */
+        /* Main Device Frame - BLACK NEON PHONE */
         .ping-device {
             width: 440px;
             height: 850px;
@@ -75,10 +81,11 @@
             border-radius: 0; /* SQUARE CORNERS */
             position: relative;
             box-shadow: 
-                0 0 0 2px rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
                 0 30px 60px rgba(0, 0, 0, 0.9),
-                inset 0 0 20px rgba(0, 255, 234, 0.1);
-            border: 2px solid var(--glass-border);
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -92,22 +99,22 @@
             left: 0;
             top: 60px;
             bottom: 100px;
-            width: 10px;
+            width: 8px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
             padding: 0;
             z-index: 5;
             border-radius: 0;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .color-segment {
             flex: 1;
             width: 100%;
             opacity: 0.2;
-            transition: all 0.5s ease;
+            transition: all 0.2s ease;
             border-radius: 0; /* SQUARE */
             position: relative;
             border: none;
@@ -118,17 +125,19 @@
             box-shadow: 0 0 15px currentColor;
         }
 
-        /* Top Status Bar - RECTANGULAR */
+        /* Top Status Bar - More Transparent */
         .status-bar {
             height: 50px;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
             z-index: 10;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         /* Three Dots Indicator - SQUARE with grey shades */
@@ -147,17 +156,17 @@
 
         .status-dot:nth-child(1) {
             background: var(--grey-1);
-            animation: dotPulseGrey1 2s infinite;
+            animation: dotPulseGrey1 1s infinite;
         }
 
         .status-dot:nth-child(2) {
             background: var(--grey-3);
-            animation: dotPulseGrey3 2s infinite 0.5s;
+            animation: dotPulseGrey3 1s infinite 0.3s;
         }
 
         .status-dot:nth-child(3) {
             background: var(--grey-6);
-            animation: dotPulseGrey6 2s infinite 1s;
+            animation: dotPulseGrey6 1s infinite 0.6s;
         }
 
         @keyframes dotPulseGrey1 {
@@ -193,7 +202,7 @@
             }
         }
 
-        /* Custom header with flipped G */
+        /* Custom header with flipped G - More Transparent */
         .branding {
             font-family: 'Orbitron', sans-serif;
             font-size: 16px;
@@ -202,9 +211,10 @@
             background: linear-gradient(90deg, var(--neon-green), var(--neon-violet), var(--neon-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 234, 0.3);
             position: relative;
             display: inline-block;
+            opacity: 0.9;
         }
 
         .flipped-g {
@@ -224,11 +234,12 @@
             background: var(--neon-orange);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--neon-orange);
-            animation: orangePulse 2s infinite;
+            animation: orangePulse 1.5s infinite;
+            opacity: 0.8;
         }
 
         @keyframes orangePulse {
-            0%, 100% { opacity: 0.7; }
+            0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
         }
 
@@ -239,27 +250,28 @@
             left: 50%;
             transform: translateX(-50%);
             width: 80px;
-            height: 5px;
+            height: 3px;
             background: var(--neon-orange);
             border-radius: 0;
             box-shadow: 0 0 15px var(--neon-orange);
-            transition: all 0.8s ease;
+            transition: all 0.5s ease;
             z-index: 11;
+            opacity: 0.8;
         }
 
         /* Screen Area - RECTANGULAR */
         .screen-area {
             flex: 1;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.4);
             margin: 10px;
             border-radius: 0; /* SQUARE */
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         /* Chat Interface */
@@ -269,16 +281,18 @@
             display: flex;
             flex-direction: column;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
 
-        /* Chat Header */
+        /* Chat Header - More Transparent */
         .chat-header {
             padding: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
             z-index: 1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .chat-title {
@@ -292,6 +306,7 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 5px;
+            opacity: 0.9;
         }
 
         .chat-subtitle {
@@ -300,6 +315,7 @@
             color: var(--text-neon);
             text-align: center;
             letter-spacing: 1px;
+            opacity: 0.8;
         }
 
         /* Chat Messages */
@@ -309,47 +325,48 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             position: relative;
             z-index: 1;
         }
 
         .message {
             max-width: 85%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-radius: 0; /* SQUARE */
             position: relative;
-            animation: messageSlide 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            font-size: 13px;
+            animation: messageSlide 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            font-size: 12px;
             line-height: 1.4;
             word-wrap: break-word;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid;
+            opacity: 0.95;
         }
 
         @keyframes messageSlide {
             from {
                 opacity: 0;
-                transform: translateY(20px) scale(0.9);
+                transform: translateY(10px) scale(0.95);
             }
             to {
-                opacity: 1;
+                opacity: 0.95;
                 transform: translateY(0) scale(1);
             }
         }
 
         .message.user {
             align-self: flex-end;
-            background: rgba(0, 162, 255, 0.15);
-            border-color: rgba(0, 255, 234, 0.3);
+            background: rgba(0, 162, 255, 0.1);
+            border-color: rgba(0, 255, 234, 0.2);
             color: var(--neon-cyan);
         }
 
         .message.bot {
             align-self: flex-start;
-            background: rgba(30, 30, 60, 0.5);
-            border-color: rgba(157, 0, 255, 0.3);
+            background: rgba(20, 20, 40, 0.3);
+            border-color: rgba(157, 0, 255, 0.2);
             color: var(--text-primary);
         }
 
@@ -357,8 +374,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
-            font-size: 10px;
+            margin-bottom: 6px;
+            font-size: 9px;
         }
 
         .message-sender {
@@ -366,8 +383,8 @@
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 11px;
+            gap: 6px;
+            font-size: 10px;
             letter-spacing: 1px;
         }
 
@@ -382,58 +399,64 @@
         .message-time {
             font-family: 'Share Tech Mono', monospace;
             opacity: 0.7;
-            font-size: 9px;
+            font-size: 8px;
             color: var(--text-secondary);
         }
 
         /* Chat Input */
         .chat-input-container {
-            padding: 10px 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
-            gap: 10px;
+            gap: 8px;
             z-index: 1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .message-input {
             flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 234, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 234, 0.15);
             border-radius: 0; /* SQUARE */
-            padding: 10px 15px;
+            padding: 8px 12px;
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             font-family: 'Exo 2', sans-serif;
-            transition: var(--transition-smooth);
+            transition: var(--transition-fast);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .message-input:focus {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 255, 234, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 234, 0.2);
         }
 
         .send-button {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 0; /* SQUARE */
-            background: rgba(0, 255, 234, 0.2);
+            background: rgba(0, 255, 234, 0.1);
             border: 1px solid var(--neon-cyan);
             color: var(--neon-cyan);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition-smooth);
-            font-size: 16px;
+            transition: var(--transition-fast);
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .send-button:hover {
             background: var(--neon-cyan);
             color: black;
-            box-shadow: 0 0 15px var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
         }
 
         /* Node Selection Screen */
@@ -443,13 +466,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .ping-logo {
@@ -463,12 +488,13 @@
             text-align: center;
             letter-spacing: 6px;
             text-transform: uppercase;
-            animation: pingGlow 3s infinite;
+            animation: pingGlow 2s infinite;
+            opacity: 0.9;
         }
 
         @keyframes pingGlow {
-            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 234, 0.5); }
-            50% { text-shadow: 0 0 40px rgba(157, 0, 255, 0.7); }
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 234, 0.3); }
+            50% { text-shadow: 0 0 40px rgba(157, 0, 255, 0.5); }
         }
 
         .ping-subtitle {
@@ -478,6 +504,7 @@
             letter-spacing: 2px;
             margin-bottom: 40px;
             text-transform: uppercase;
+            opacity: 0.8;
         }
 
         .node-selection-title {
@@ -487,102 +514,107 @@
             margin-bottom: 20px;
             text-align: center;
             letter-spacing: 2px;
+            opacity: 0.9;
         }
 
         .node-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            width: 280px;
+            gap: 10px;
+            width: 260px;
             margin-bottom: 30px;
         }
 
         .node-option {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 0; /* SQUARE */
             cursor: pointer;
-            border: 2px solid transparent;
-            transition: var(--transition-smooth);
+            border: 1px solid transparent;
+            transition: var(--transition-fast);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
             color: white;
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .node-option:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px currentColor;
-        }
-
-        .node-option.selected {
-            border-color: white;
-            box-shadow: 0 0 30px white;
-            animation: nodePulse 2s infinite;
-        }
-
-        @keyframes nodePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .node-label {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 8px;
-            position: absolute;
-            bottom: -18px;
-            color: var(--text-secondary);
-            width: 100%;
-            text-align: center;
-        }
-
-        /* RECTANGULAR Keypad */
-        .keypad-container {
-            height: 240px;
-            background: rgba(0, 0, 0, 0.5);
-            margin: 10px;
-            border-radius: 0; /* SQUARE */
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            display: grid;
-            grid-template-rows: repeat(4, 1fr);
-            grid-template-columns: repeat(10, 1fr);
-            gap: 4px;
-            padding: 10px;
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        /* Key Styles - RECTANGULAR */
-        .key {
-            background: var(--key-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0; /* SQUARE */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-primary);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition-smooth);
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
         }
 
+        .node-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .node-option.selected {
+            border-color: white;
+            box-shadow: 0 0 20px white;
+            animation: nodePulse 1.5s infinite;
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .node-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 7px;
+            position: absolute;
+            bottom: -16px;
+            color: var(--text-secondary);
+            width: 100%;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* RECTANGULAR Keypad */
+        .keypad-container {
+            height: 220px;
+            background: rgba(0, 0, 0, 0.3);
+            margin: 8px;
+            border-radius: 0; /* SQUARE */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: grid;
+            grid-template-rows: repeat(4, 1fr);
+            grid-template-columns: repeat(10, 1fr);
+            gap: 3px;
+            padding: 8px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        /* Key Styles - RECTANGULAR */
+        .key {
+            background: var(--key-glass);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0; /* SQUARE */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            opacity: 0.9;
+        }
+
         .key:active {
             background: var(--key-pressed);
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .key.space {
@@ -590,74 +622,116 @@
         }
 
         .key.enter {
-            background: rgba(0, 162, 255, 0.2);
+            background: rgba(0, 162, 255, 0.15);
             color: var(--neon-cyan);
             font-weight: 700;
-            border-color: rgba(0, 255, 234, 0.3);
+            border-color: rgba(0, 255, 234, 0.2);
         }
 
         .key.backspace {
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(255, 0, 0, 0.15);
             color: var(--neon-red);
-            border-color: rgba(255, 0, 0, 0.3);
+            border-color: rgba(255, 0, 0, 0.2);
         }
 
         /* Key Lighting Logic */
         .key.lit {
-            box-shadow: 0 0 15px currentColor;
+            box-shadow: 0 0 10px currentColor;
             border-color: currentColor;
             color: currentColor;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         /* Frame Glow Effect */
         .frame-glow {
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
             border-radius: 0; /* SQUARE */
             background: transparent;
             z-index: -1;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
             pointer-events: none;
         }
 
-        /* Footer Control Panel */
+        /* Footer Control Panel - More Transparent */
         .control-panel {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            gap: 6px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .control-button {
-            padding: 8px 5px;
-            background: rgba(40, 40, 60, 0.8);
+            padding: 6px 4px;
+            background: rgba(40, 40, 60, 0.4);
             border: 1px solid var(--neon-cyan);
             color: var(--neon-cyan);
             font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
+            font-size: 9px;
             cursor: pointer;
-            transition: var(--transition-smooth);
+            transition: var(--transition-fast);
             border-radius: 0; /* SQUARE */
             letter-spacing: 1px;
             text-align: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            opacity: 0.9;
         }
 
         .control-button:hover {
-            background: var(--neon-cyan);
+            background: rgba(0, 255, 234, 0.3);
+            color: white;
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .control-button.active {
+            background: rgba(0, 255, 234, 0.4);
             color: black;
             box-shadow: 0 0 10px var(--neon-cyan);
         }
 
-        .control-button.active {
+        /* Sound Wave Indicator */
+        .sound-wave {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 20px;
+            height: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sound-wave.active {
+            opacity: 0.7;
+        }
+
+        .sound-bar {
+            width: 2px;
             background: var(--neon-cyan);
-            color: black;
+            border-radius: 1px;
+            animation: soundWave 0.5s infinite ease-in-out;
+        }
+
+        .sound-bar:nth-child(1) { height: 3px; animation-delay: 0s; }
+        .sound-bar:nth-child(2) { height: 6px; animation-delay: 0.1s; }
+        .sound-bar:nth-child(3) { height: 9px; animation-delay: 0.2s; }
+        .sound-bar:nth-child(4) { height: 6px; animation-delay: 0.3s; }
+        .sound-bar:nth-child(5) { height: 3px; animation-delay: 0.4s; }
+
+        @keyframes soundWave {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
         }
 
         /* Edge Indicator */
@@ -665,27 +739,28 @@
             position: absolute;
             left: 0;
             top: 60px;
-            width: 10px;
-            height: 50px;
+            width: 8px;
+            height: 40px;
             z-index: 5;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            box-shadow: 0 0 15px currentColor;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 0 10px currentColor;
         }
 
         /* Scrollbar */
         .chat-messages::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
 
         .chat-messages::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 0;
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, var(--neon-cyan), var(--neon-violet));
             border-radius: 0;
+            opacity: 0.7;
         }
 
         /* Responsive */
@@ -696,30 +771,44 @@
             }
             
             .keypad-container {
-                height: 200px;
-                gap: 3px;
-                padding: 8px;
+                height: 180px;
+                gap: 2px;
+                padding: 6px;
             }
             
             .key {
-                font-size: 12px;
+                font-size: 10px;
             }
             
             .node-grid {
                 width: 90%;
-                gap: 10px;
+                gap: 8px;
             }
             
             .node-option {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
+                width: 35px;
+                height: 35px;
+                font-size: 12px;
             }
             
             .control-button {
-                font-size: 9px;
-                padding: 6px 3px;
+                font-size: 8px;
+                padding: 5px 2px;
             }
+            
+            .ping-logo {
+                font-size: 28px;
+            }
+        }
+        
+        /* Loading animation for faster messages */
+        @keyframes fastPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .fast-pulse {
+            animation: fastPulse 0.5s infinite;
         }
     </style>
 </head>
@@ -740,6 +829,15 @@
         <!-- Frame Glow -->
         <div class="frame-glow" id="frameGlow"></div>
 
+        <!-- Sound Wave Indicator -->
+        <div class="sound-wave" id="soundWave">
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+        </div>
+
         <!-- Status Bar with Header -->
         <div class="status-bar">
             <div class="three-dots-indicator">
@@ -758,12 +856,12 @@
             <!-- Node Selection Screen -->
             <div class="ping-startup-screen" id="pingStartupScreen">
                 <div class="ping-logo">IPNOTEC PINGG</div>
-                <div class="ping-subtitle">NEON COMMUNICATION NETWORK</div>
+                <div class="ping-subtitle">FUTURE COMMUNICATION NETWORK</div>
                 <div class="node-selection-title">SELECT YOUR NODE COLOR</div>
                 <div class="node-grid" id="nodeGrid">
                     <!-- Node options will be added dynamically -->
                 </div>
-                <button class="send-button" id="confirmNodeButton" onclick="confirmNodeSelection()" style="width: 200px; height: 40px; font-size: 12px;">
+                <button class="send-button" id="confirmNodeButton" onclick="confirmNodeSelection()" style="width: 200px; height: 36px; font-size: 11px;">
                     <i class="fas fa-plug"></i> CONNECT TO NETWORK
                 </button>
             </div>
@@ -772,7 +870,7 @@
             <div class="chat-interface" id="chatInterface">
                 <!-- Chat Header -->
                 <div class="chat-header">
-                    <div class="chat-title">IPNOTEC NEON NETWORK</div>
+                    <div class="chat-title">IPNOTEC FUTURE NETWORK</div>
                     <div class="chat-subtitle">NODE: <span id="currentUserNode">CYAN</span> • SYSTEM: <span id="systemStatus">ONLINE</span></div>
                 </div>
 
@@ -872,7 +970,7 @@
     </div>
 
     <script>
-        // App State
+        // App State - 3X FASTER
         let userNodeColor = 'cyan';
         let userNodeName = 'CYAN EXPLORER';
         let isSystemOnline = true;
@@ -884,6 +982,11 @@
         let currentColorIndex = 0;
         let lastSenderKey = null;
         let lastSenderColor = null;
+        let messageCount = 0;
+        
+        // Audio Context for Futuristic Sounds
+        let audioContext = null;
+        let soundWaveElement = null;
         
         // Color Configuration
         const colorConfig = [
@@ -901,28 +1004,38 @@
         
         // IPNOTEC Network Participants
         const networkParticipants = [
-            { name: 'ipnotec', color: 'orange', role: 'AI Research Lead' },
+            { name: 'ipnotec', color: 'orange', role: 'Founder & Visionary' },
             { name: '1001', color: 'violet', role: 'Blockchain Architect' },
-            { name: 'bharath', color: 'green', role: 'Wearable Tech Expert' },
-            { name: 'quantum', color: 'cyan', role: 'Smart Home Systems' },
-            { name: 'nova', color: 'blue', role: 'Sustainable Tech' },
-            { name: 'echo', color: 'yellow', role: 'Energy Innovation' },
-            { name: 'synth', color: 'pink', role: 'Music & Entertainment' },
-            { name: 'core', color: 'red', role: 'Security Systems' }
+            { name: 'bharath', color: 'green', role: 'Wearable Tech Lead' },
+            { name: 'quantum', color: 'cyan', role: 'Smart Systems AI' },
+            { name: 'nova', color: 'blue', role: 'Sustainable Innovation' },
+            { name: 'echo', color: 'yellow', role: 'Energy Systems' },
+            { name: 'synth', color: 'pink', role: 'Entertainment Tech' },
+            { name: 'core', color: 'red', role: 'Security & QNX Systems' },
+            { name: 'neural', color: 'indigo', role: 'AI Research' },
+            { name: 'pulse', color: 'white', role: 'Network Operations' }
         ];
         
-        // IPNOTEC Chat Topics
+        // EXPANDED IPNOTEC Chat Topics
         const ipnotecTopics = [
-            "IPNOTEC WATCH revolutionizing smart wearables - phoneless, keyless, paperless ecosystem",
-            "The future of work: IPNOTEC coworking spaces with holographic meeting rooms",
-            "Blockchain transforming real estate - fractional ownership through IPNOTEC tokens",
-            "IPNOTEC STUDIOS producing techno music that syncs with neural patterns",
-            "LAND ROVER x IPNOTEC creating self-driving adventure vehicles with AR navigation",
-            "HARLEY DAVIDSON electric bikes with IPNOTEC neural interface controls",
-            "Container houses reimagined: IPNOTEC modular smart homes with AI management",
-            "International citizens living in IPNOTEC digital nomad hubs worldwide",
-            "Spirituality meets tech: IPNOTEC meditation pods with biofeedback systems",
-            "Steve Jobs' vision realized: IPNOTEC creating the next century's iconic products"
+            "IPNOTEC is building the organization of the future - a phoneless, keyless, paperless ecosystem",
+            "Our vision: A society where technology serves humanity, not the other way around",
+            "IPNOTEC Watch: The first truly phoneless wearable with neural interface technology",
+            "The BB QNX integration in IPNOTEC Watch provides military-grade security for @ipnotec.vip accounts",
+            "Imagine a world without phones. IPNOTEC Watch projects holographic interfaces directly to your retina",
+            "Neural-linked communication: Direct thought-to-text translation through IPNOTEC neural interfaces",
+            "IPNOTEC biometic authentication: Your unique biological signature is your universal key",
+            "IPNOTEC digital documentation: All contracts, IDs, and records secured on quantum-resistant blockchain",
+            "IPNOTEC Studios: Creating the future of entertainment with adaptive neural-responsive media",
+            "IPNOTEC internships awaken young generations to purposeful living through technology",
+            "BB QNX provides military-grade security for IPNOTEC's entire ecosystem",
+            "Quantum-resistant blockchain ensures our systems remain secure against future threats",
+            "IPNOTEC coworking spaces: Global network of innovation hubs with holographic meeting rooms",
+            "Container house revolution: IPNOTEC modular smart homes with full AI management systems",
+            "IPNOTEC tokens enable fractional ownership of real estate and assets worldwide",
+            "We're not just a company; we're building the infrastructure for humanity's next evolutionary step",
+            "IPNOTEC represents the convergence of consciousness, creativity, and cutting-edge technology",
+            "Our mission: Create technology that enhances human potential while preserving our humanity"
         ];
         
         // Initialize App
@@ -932,6 +1045,9 @@
             
             // Initialize node selection grid
             initializeNodeGrid();
+            
+            // Get sound wave element
+            soundWaveElement = document.getElementById('soundWave');
             
             // Setup event listeners
             document.getElementById('sendButton').addEventListener('click', sendMessage);
@@ -945,7 +1061,8 @@
             document.querySelectorAll('.key').forEach(key => {
                 key.addEventListener('click', handleKeypadClick);
                 key.addEventListener('mousedown', function() {
-                    this.style.transform = 'scale(0.95)';
+                    this.style.transform = 'scale(0.92)';
+                    playKeySound();
                 });
                 key.addEventListener('mouseup', function() {
                     this.style.transform = 'scale(1)';
@@ -955,12 +1072,211 @@
                 });
             });
             
-            // Start vertical bar animation
+            // Start vertical bar animation (3X faster)
             startVerticalBarAnimation();
             
-            // Start periodic bot messages
-            setTimeout(startBotMessages, 5000);
+            // Start periodic bot messages (3X faster - every 5 seconds)
+            setTimeout(startBotMessages, 2000);
+            
+            // Initialize audio context on first user interaction
+            document.addEventListener('click', initializeAudioContext, { once: true });
         });
+        
+        // Initialize Audio Context
+        function initializeAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                // Play a startup sound
+                if (soundEnabled) {
+                    setTimeout(() => playStartupSound(), 100);
+                }
+            }
+        }
+        
+        // ========== FUTURISTIC SOUND FUNCTIONS ==========
+        
+        // Play Message Notification Sound (Very short, futuristic)
+        function playMessageSound(type = 'notification') {
+            if (!soundEnabled || !audioContext) return;
+            
+            try {
+                // Create oscillator for the main tone
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                // Connect nodes
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Different sounds for different message types
+                if (type === 'user') {
+                    // Short, ascending tone for user messages
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.08);
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.08);
+                    
+                } else if (type === 'bot') {
+                    // Short, descending tone for bot messages
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+                    
+                    // Add a slight modulation for futuristic feel
+                    const modulator = audioContext.createOscillator();
+                    const modulatorGain = audioContext.createGain();
+                    
+                    modulator.type = 'sine';
+                    modulator.frequency.setValueAtTime(30, audioContext.currentTime);
+                    modulatorGain.gain.setValueAtTime(50, audioContext.currentTime);
+                    
+                    modulator.connect(modulatorGain);
+                    modulatorGain.connect(oscillator.frequency);
+                    
+                    gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                    
+                    modulator.start(audioContext.currentTime);
+                    oscillator.start(audioContext.currentTime);
+                    
+                    modulator.stop(audioContext.currentTime + 0.1);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    
+                } else if (type === 'ping') {
+                    // Very short, high-tech ping sound
+                    oscillator.type = 'sine';
+                    
+                    // Create a quick ping with decay
+                    const now = audioContext.currentTime;
+                    oscillator.frequency.setValueAtTime(1500, now);
+                    oscillator.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                    
+                    gainNode.gain.setValueAtTime(0.15, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.05);
+                    
+                } else if (type === 'connect') {
+                    // Connection established sound
+                    oscillator.type = 'sawtooth';
+                    
+                    const now = audioContext.currentTime;
+                    oscillator.frequency.setValueAtTime(200, now);
+                    oscillator.frequency.linearRampToValueAtTime(800, now + 0.15);
+                    
+                    gainNode.gain.setValueAtTime(0.05, now);
+                    gainNode.gain.linearRampToValueAtTime(0.1, now + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.15);
+                    
+                } else {
+                    // Default notification sound
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.06);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.06);
+                }
+                
+                // Show sound wave animation
+                showSoundWave();
+                
+            } catch (error) {
+                console.log("Audio error:", error);
+                // Silently fail - audio is not critical
+            }
+        }
+        
+        // Play Key Press Sound (ultra short)
+        function playKeySound() {
+            if (!soundEnabled || !audioContext) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                
+                gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.03);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.03);
+                
+            } catch (error) {
+                // Silently fail
+            }
+        }
+        
+        // Play Startup Sound
+        function playStartupSound() {
+            if (!soundEnabled || !audioContext) return;
+            
+            try {
+                // Create a short startup sequence
+                const now = audioContext.currentTime;
+                
+                // First beep
+                const osc1 = audioContext.createOscillator();
+                const gain1 = audioContext.createGain();
+                osc1.connect(gain1);
+                gain1.connect(audioContext.destination);
+                
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(800, now);
+                gain1.gain.setValueAtTime(0.1, now);
+                gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                
+                // Second beep
+                const osc2 = audioContext.createOscillator();
+                const gain2 = audioContext.createGain();
+                osc2.connect(gain2);
+                gain2.connect(audioContext.destination);
+                
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1200, now + 0.06);
+                gain2.gain.setValueAtTime(0.08, now + 0.06);
+                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.11);
+                
+                osc1.start(now);
+                osc1.stop(now + 0.05);
+                
+                osc2.start(now + 0.06);
+                osc2.stop(now + 0.11);
+                
+                showSoundWave();
+                
+            } catch (error) {
+                // Silently fail
+            }
+        }
+        
+        // Show Sound Wave Animation
+        function showSoundWave() {
+            if (!soundWaveElement) return;
+            
+            soundWaveElement.classList.add('active');
+            
+            // Hide after animation
+            setTimeout(() => {
+                soundWaveElement.classList.remove('active');
+            }, 500);
+        }
         
         // Initialize Vertical Color Bar
         function initializeVerticalColorBar() {
@@ -994,6 +1310,7 @@
                 
                 nodeOption.addEventListener('click', function() {
                     selectNode(this.dataset.color);
+                    if (soundEnabled) playMessageSound('connect');
                 });
                 
                 nodeGrid.appendChild(nodeOption);
@@ -1017,6 +1334,9 @@
             const pingScreen = document.getElementById('pingStartupScreen');
             const chatInterface = document.getElementById('chatInterface');
             
+            // Play connection sound
+            if (soundEnabled) playMessageSound('connect');
+            
             // Update user node display
             document.getElementById('currentUserNode').textContent = 
                 colorConfig.find(c => c.id === userNodeColor).name;
@@ -1027,17 +1347,20 @@
                 pingScreen.style.display = 'none';
                 chatInterface.style.opacity = '1';
                 
-                // Add welcome messages
+                // Add welcome messages (3X faster)
                 setTimeout(() => {
                     addBotMessage('SYSTEM', `WELCOME TO IPNOTEC NETWORK, ${userNodeName}`, 'cyan');
                     setTimeout(() => {
                         addBotMessage('QUANTUM-X', 'THE FUTURE BELONGS TO THOSE WHO CODE REALITY', 'violet');
-                    }, 1000);
-                }, 500);
-            }, 800);
+                        setTimeout(() => {
+                            addBotMessage('IPNOTEC', 'ENTERING PHONELESS, KEYLESS, PAPERLESS ECOSYSTEM PROTOCOL', 'orange');
+                        }, 500);
+                    }, 300);
+                }, 200);
+            }, 500);
         }
         
-        // Start Vertical Bar Animation
+        // Start Vertical Bar Animation (3X faster)
         function startVerticalBarAnimation() {
             clearInterval(verticalBarAnimation);
             
@@ -1056,18 +1379,18 @@
                 }
                 
                 // Update top color strip with orange as base
-                updateTopColorStrip(colorConfig[7].hex); // Orange
+                updateTopColorStrip(colorConfig[6].hex); // Orange
                 
                 // Move to next color
                 currentColorIndex = (currentColorIndex + 1) % colorConfig.length;
-            }, 500);
+            }, 167); // 3X faster: 500ms -> ~167ms
         }
         
         // Update Top Color Strip
         function updateTopColorStrip(colorHex) {
             const topStrip = document.getElementById('topColorStrip');
             topStrip.style.backgroundColor = colorHex;
-            topStrip.style.boxShadow = `0 0 20px ${colorHex}`;
+            topStrip.style.boxShadow = `0 0 15px ${colorHex}`;
         }
         
         // Toggle Keypad Lighting
@@ -1078,6 +1401,7 @@
             if (keypadLighting) {
                 button.classList.add('active');
                 button.textContent = 'KEYLIGHTS ON';
+                if (soundEnabled) playMessageSound('connect');
                 // If there's a last sender, light that key
                 if (lastSenderKey && lastSenderColor) {
                     lightSpecificKey(lastSenderKey, lastSenderColor);
@@ -1116,7 +1440,7 @@
                 keyElement.classList.add('lit');
                 keyElement.style.color = color.hex;
                 keyElement.style.borderColor = color.hex;
-                keyElement.style.boxShadow = `0 0 15px ${color.hex}`;
+                keyElement.style.boxShadow = `0 0 10px ${color.hex}`;
             }
             
             // Update edge indicator
@@ -1124,10 +1448,10 @@
             edgeIndicator.style.backgroundColor = color.hex;
             edgeIndicator.style.opacity = '1';
             
-            // Turn off edge indicator after 3 seconds
+            // Turn off edge indicator after 2 seconds (3X faster)
             setTimeout(() => {
                 edgeIndicator.style.opacity = '0';
-            }, 3000);
+            }, 2000);
         }
         
         // Toggle Animation
@@ -1138,6 +1462,7 @@
             if (animationsEnabled) {
                 button.classList.add('active');
                 button.textContent = 'ANIMATION ON';
+                if (soundEnabled) playMessageSound('connect');
                 startVerticalBarAnimation();
             } else {
                 button.classList.remove('active');
@@ -1157,6 +1482,16 @@
             if (soundEnabled) {
                 button.classList.add('active');
                 button.textContent = 'SOUND ON';
+                
+                // Initialize audio context if not already done
+                initializeAudioContext();
+                
+                // Play a sound to indicate sound is on
+                setTimeout(() => {
+                    if (audioContext && audioContext.state === 'running') {
+                        playMessageSound('ping');
+                    }
+                }, 100);
             } else {
                 button.classList.remove('active');
                 button.textContent = 'SOUND OFF';
@@ -1193,7 +1528,7 @@
             input.focus();
         }
         
-        // Send Message
+        // Send Message (3X faster response)
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -1202,21 +1537,28 @@
                 addUserMessage(message);
                 input.value = '';
                 
-                // Bot response after delay
+                // Bot response after shorter delay (3X faster)
                 setTimeout(() => {
                     const randomBot = networkParticipants[Math.floor(Math.random() * networkParticipants.length)];
                     const response = generateBotResponse(message);
                     addBotMessage(randomBot.name.toUpperCase(), response, randomBot.color);
-                }, 1000);
+                }, 333); // 3X faster: 1000ms -> ~333ms
             }
         }
         
         // Add User Message
         function addUserMessage(text) {
+            messageCount++;
             const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
             const userColor = colorConfig.find(c => c.id === userNodeColor);
             
+            // Limit messages for performance
+            if (messageCount > 50) {
+                const firstMessage = messagesContainer.querySelector('.message');
+                if (firstMessage) firstMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
             messageDiv.className = 'message user';
             messageDiv.innerHTML = `
                 <div class="message-header">
@@ -1231,16 +1573,26 @@
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             
+            // Play user message sound
+            if (soundEnabled) playMessageSound('user');
+            
             // Trigger visual effects
             triggerColorEffects(userNodeColor);
         }
         
-        // Add Bot Message
+        // Add Bot Message (3X faster animation)
         function addBotMessage(sender, text, color) {
+            messageCount++;
             const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
             const colorObj = colorConfig.find(c => c.id === color) || colorConfig[0];
             
+            // Limit messages for performance
+            if (messageCount > 50) {
+                const firstMessage = messagesContainer.querySelector('.message');
+                if (firstMessage) firstMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
             messageDiv.className = 'message bot';
             messageDiv.innerHTML = `
                 <div class="message-header">
@@ -1255,6 +1607,9 @@
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             
+            // Play bot message sound
+            if (soundEnabled) playMessageSound('bot');
+            
             // Store last sender info for key lighting
             lastSenderKey = sender.charAt(0).toLowerCase();
             lastSenderColor = color;
@@ -1268,7 +1623,7 @@
             triggerColorEffects(color);
         }
         
-        // Trigger Color Effects
+        // Trigger Color Effects (3X faster)
         function triggerColorEffects(color) {
             // Update vertical color bar
             activateColorSegment(color);
@@ -1289,14 +1644,14 @@
             if (segment) {
                 segment.classList.add('active');
                 
-                // Deactivate after 3 seconds
+                // Deactivate after shorter time (3X faster)
                 setTimeout(() => {
                     segment.classList.remove('active');
-                }, 3000);
+                }, 1000);
             }
         }
         
-        // Trigger Frame Glow
+        // Trigger Frame Glow (3X faster)
         function triggerFrameGlow(color) {
             const frameGlow = document.getElementById('frameGlow');
             const colorObj = colorConfig.find(c => c.id === color) || colorConfig[0];
@@ -1310,23 +1665,23 @@
             
             // Apply new glow
             frameGlow.style.background = `radial-gradient(circle at center, ${colorHex}20, transparent 70%)`;
-            frameGlow.style.boxShadow = `0 0 40px ${colorHex}80, inset 0 0 40px ${colorHex}40`;
+            frameGlow.style.boxShadow = `0 0 30px ${colorHex}80, inset 0 0 30px ${colorHex}40`;
             frameGlow.style.opacity = '1';
             
-            // Remove glow after 1 second
+            // Remove glow after shorter time (3X faster)
             activeFrameGlow = setTimeout(() => {
                 frameGlow.style.opacity = '0';
                 activeFrameGlow = null;
-            }, 1000);
+            }, 333); // 3X faster: 1000ms -> ~333ms
         }
         
-        // Start Bot Messages
+        // Start Bot Messages (3X faster - every 5 seconds)
         function startBotMessages() {
             setInterval(() => {
                 const randomBot = networkParticipants[Math.floor(Math.random() * networkParticipants.length)];
                 const randomTopic = ipnotecTopics[Math.floor(Math.random() * ipnotecTopics.length)];
                 addBotMessage(randomBot.name.toUpperCase(), randomTopic, randomBot.color);
-            }, 15000);
+            }, 5000); // 3X faster: 15000ms -> 5000ms
         }
         
         // Generate Bot Response
@@ -1334,16 +1689,24 @@
             const upperMessage = userMessage.toUpperCase();
             
             // Check for IPNOTEC-related keywords
-            if (upperMessage.includes('IPNOTEC') || upperMessage.includes('ECOSYSTEM')) {
-                return "IPNOTEC is building the future: phoneless, keyless, paperless society with seamless integration across all devices.";
+            if (upperMessage.includes('IPNOTEC') || upperMessage.includes('VISION')) {
+                return "IPNOTEC is building the organization of the future: phoneless, keyless, paperless society with seamless neural integration.";
             } else if (upperMessage.includes('WATCH') || upperMessage.includes('WEARABLE')) {
-                return "IPNOTEC WATCH uses neural interfaces to project holographic displays directly to your retina. No phone needed.";
-            } else if (upperMessage.includes('BLOCKCHAIN') || upperMessage.includes('TOKEN')) {
-                return "IPNOTEC blockchain will revolutionize property ownership through fractional NFT-based real estate tokens.";
-            } else if (upperMessage.includes('COWORK') || upperMessage.includes('WORKSPACE')) {
-                return "IPNOTEC coworking spaces feature holographic meeting rooms, neuro-feedback environments, and global network access.";
-            } else if (upperMessage.includes('MUSIC') || upperMessage.includes('TECHNO')) {
-                return "IPNOTEC STUDIOS creates adaptive music that changes based on your biometrics and environment. The future of entertainment.";
+                return "IPNOTEC WATCH uses BB QNX military-grade security with neural interfaces projecting holographic displays to your retina. No phone needed.";
+            } else if (upperMessage.includes('PHONELESS') || upperMessage.includes('ECOSYSTEM')) {
+                return "The phoneless ecosystem eliminates device dependency. Communication happens through neural interfaces and holographic projections.";
+            } else if (upperMessage.includes('KEYLESS') || upperMessage.includes('SECURITY')) {
+                return "Keyless society uses biometric blockchain authentication. Your biological signature is your universal key to everything.";
+            } else if (upperMessage.includes('PAPERLESS') || upperMessage.includes('DOCUMENT')) {
+                return "Paperless world means all documents are secured on quantum-resistant blockchain with holographic display capabilities.";
+            } else if (upperMessage.includes('QNX') || upperMessage.includes('MILITARY')) {
+                return "BB QNX provides military-grade security for @ipnotec.vip accounts and the entire IPNOTEC ecosystem infrastructure.";
+            } else if (upperMessage.includes('STUDIOS') || upperMessage.includes('MUSIC')) {
+                return "IPNOTEC STUDIOS creates adaptive music and entertainment that changes based on your biometrics and neural patterns.";
+            } else if (upperMessage.includes('INTERNSHIP') || upperMessage.includes('YOUNG')) {
+                return "IPNOTEC internships awaken the young generation to purposeful living through technology that serves humanity.";
+            } else if (upperMessage.includes('FUTURE') || upperMessage.includes('ORGANIZATION')) {
+                return "IPNOTEC represents the organization of the future - merging consciousness, creativity and cutting-edge technology for human advancement.";
             }
             
             // Default responses
@@ -1352,7 +1715,10 @@
                 "Neural analysis confirms alignment with IPNOTEC future vision. Proceed with implementation.",
                 "Your input resonates at optimal frequency for innovation. The ecosystem adapts accordingly.",
                 "Quantum entanglement patterns detected in your message. The future is already responding.",
-                "IPNOTEC AI networks are processing millions of similar queries worldwide. You're not alone."
+                "IPNOTEC AI networks are processing millions of similar queries worldwide. You're not alone.",
+                "Phoneless, keyless, paperless protocol activated. Your query integrates with IPNOTEC vision.",
+                "BB QNX security verification passed. Message received by IPNOTEC neural network.",
+                "Adaptive response generated based on your biometric reading and neural patterns."
             ];
             
             return responses[Math.floor(Math.random() * responses.length)];
@@ -1366,7 +1732,10 @@
         
         // Send Ping
         function sendPing() {
-            addBotMessage('SYSTEM', 'PING SENT TO ALL NODES - RESPONSE RECEIVED', 'cyan');
+            // Play ping sound
+            if (soundEnabled) playMessageSound('ping');
+            
+            addBotMessage('SYSTEM', 'PING SENT TO ALL NODES - RESPONSE RECEIVED IN 0.3ms', 'cyan');
             triggerColorEffects('cyan');
         }
         
@@ -1374,7 +1743,8 @@
         function clearChat() {
             const messagesContainer = document.getElementById('chatMessages');
             messagesContainer.innerHTML = '';
-            addBotMessage('SYSTEM', 'CHAT LOG CLEARED', 'cyan');
+            messageCount = 0;
+            addBotMessage('SYSTEM', 'CHAT LOG CLEARED - IPNOTEC NETWORK ACTIVE', 'cyan');
         }
         
         // Randomize Colors
@@ -1386,7 +1756,7 @@
             // Update display
             document.getElementById('currentUserNode').textContent = randomColor.name;
             
-            addBotMessage('SYSTEM', `NODE COLOR RANDOMIZED TO ${randomColor.name}`, randomColor.id);
+            addBotMessage('SYSTEM', `NODE COLOR RANDOMIZED TO ${randomColor.name} - NEURAL SYNC COMPLETE`, randomColor.id);
             triggerColorEffects(randomColor.id);
         }
     </script>
